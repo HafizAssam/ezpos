@@ -1,95 +1,3 @@
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dashboard.dart';
-// import 'signup_page.dart';
-
-// class LoginPage extends StatefulWidget {
-//   @override
-//   _LoginPageState createState() => _LoginPageState();
-// }
-
-// class _LoginPageState extends State<LoginPage> {
-//   var email = '';
-//   var person_id = '';
-//   bool _obscuretext = true;
-
-//   Future<void> _makeLoginRequest(BuildContext context) async {
-//     try {
-//       var headers = {
-//         'Content-Type': 'application/json',
-//       };
-
-//       var requestBody = {
-//         "username": email,
-//         "person_id": person_id,
-//       };
-
-//       var response = await http.post(
-//         Uri.parse('http://localhost:3000/login'),
-//         headers: headers,
-//         body: json.encode(requestBody),
-//       );
-
-//       if (response.statusCode == 200) {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => Dashboard(),
-//         ));
-//         print(await response.stream.bytesToString());
-//         print("Login Successfully");
-//       } else {
-//         print(response.reasonPhrase);
-//         print("Login failed");
-//       }
-//     } catch (error) {
-//       print("Error during API call: $error");
-//       // Handle error, show a snackbar, etc.
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var width = MediaQuery.of(context).size.width;
-//     var height = MediaQuery.of(context).size.height;
-
-//     return Scaffold(
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Container(
-//             padding: EdgeInsets.symmetric(horizontal: width * 0.1),
-//             height: height,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 // ... (other UI components)
-
-//                 ElevatedButton(
-//                   onPressed: () async {
-//                     await _makeLoginRequest(context);
-//                   },
-//                   child: Text('LOGIN', style: TextStyle(fontSize: 18)),
-//                   style: ElevatedButton.styleFrom(
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(30),
-//                     ),
-//                     primary: Colors.blue,
-//                   ),
-//                 ),
-
-//                 // ... (other UI components)
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -98,94 +6,68 @@ import 'dashboard.dart';
 import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
-  // var email = '';
+  var email = '';
+  var person_id = '';
+  Future<void> main(BuildContext context) async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request =
+        http.Request('POST', Uri.parse('http://localhost:3000/login'));
+    request.body =
+        json.encode({"username": "$email", "person_id": "$person_id"});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Dashboard(),
+      ));
+      print(await response.stream.bytesToString());
+      print("Login Successfully ");
+    } else {
+      print(response.reasonPhrase);
+      print("failed");
+    }
+  }
+
+  //  var email = '';
   // var person_id = '';
-  // Future<void> main(BuildContext context) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //   };
-  //   var request =
-  //       http.Request('POST', Uri.parse('http://localhost:3000/login'));
-  //   request.body =
-  //       json.encode({"username": "$email", "person_id": "$person_id"});
-  //   request.headers.addAll(headers);
+  // bool _obscuretext = true;
 
-  //   http.StreamedResponse response = await request.send();
+  // Future<void> _makeLoginRequest(BuildContext context) async {
+  //   try {
+  //     var headers = {
+  //       'Content-Type': 'application/json',
+  //     };
 
-  //   if (response.statusCode == 200) {
-  //     Navigator.of(context).push(MaterialPageRoute(
-  //       builder: (context) => Dashboard(),
-  //     ));
-  //     print(await response.stream.bytesToString());
-  //     print("Login Successfully ");
-  //   } else {
-  //     print(response.reasonPhrase);
-  //     print("failed");
-  //   }
-  // }
+  //     var requestBody = {
+  //       "username": email,
+  //       "person_id": person_id,
+  //     };
 
-  //  try {
-  //     final response = await http.post(
+  //     var response = await http.post(
   //       Uri.parse('http://localhost:3000/login'),
   //       headers: headers,
   //       body: json.encode(requestBody),
   //     );
 
   //     if (response.statusCode == 200) {
-  //       final responseBody = await response.stream.bytesToString();
-  //       print(responseBody);
-  //       print("Login Successfully ");
+  //       Navigator.of(context).push(MaterialPageRoute(
+  //         builder: (context) => Dashboard(),
+  //       ));
+  //       print(await response.stream.bytesToString());
+  //       print("Login Successfully");
   //     } else {
-  //       print("API call failed: ${response.reasonPhrase}");
+  //       print(response.reasonPhrase);
+  //       print("Login failed");
   //     }
   //   } catch (error) {
   //     print("Error during API call: $error");
+  //     // Handle error, show a snackbar, etc.
   //   }
-  // }
-
-  // ... rest of the class ...
-
-
-
-   var email = '';
-  var person_id = '';
-  bool _obscuretext = true;
-
-  Future<void> _makeLoginRequest(BuildContext context) async {
-    try {
-      var headers = {
-        'Content-Type': 'application/json',
-      };
-
-      var requestBody = {
-        "username": email,
-        "person_id": person_id,
-      };
-
-      var response = await http.post(
-        Uri.parse('http://localhost:3000/login'),
-        headers: headers,
-        body: json.encode(requestBody),
-      );
-      
-
-      
-
-      if (response.statusCode == 200) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Dashboard(),
-        ));
-        print(await response.stream.bytesToString());
-        print("Login Successfully");
-      } else {
-        print(response.reasonPhrase);
-        print("Login failed");
-      }
-    } catch (error) {
-      print("Error during API call: $error");
-      // Handle error, show a snackbar, etc.
-    }
-   }
+  //  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,38 +144,35 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: height * 0.07,
                   width: double.infinity,
-                   child:
-                    ElevatedButton(
-                  onPressed: () async {
-                    await _makeLoginRequest(context);
-                  },
-                  child: Text('LOGIN', style: TextStyle(fontSize: 18)),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                  child:
+                      //     ElevatedButton(
+                      //   onPressed: () async {
+                      //     await _makeLoginRequest(context);
+                      //   },
+                      //   child: Text('LOGIN', style: TextStyle(fontSize: 18)),
+                      //   style: ElevatedButton.styleFrom(
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(30),
+                      //     ),
+                      //     primary: Colors.blue,
+                      //   ),
+                      // ),
+
+                      ElevatedButton(
+                    onPressed: () async {
+                      await main(context);
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //   builder: (context) => Dashboard(),
+                      // ));
+                    },
+                    child: Text('LOGIN', style: TextStyle(fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      primary: Colors.blue,
                     ),
-                    primary: Colors.blue,
                   ),
-                ),
-
-
-
-
-                    // ElevatedButton(
-                  //   onPressed: () async {
-                  //     await main(context);
-                  //     // Navigator.of(context).push(MaterialPageRoute(
-                  //     //   builder: (context) => Dashboard(),
-                  //     // ));
-                  //   },
-                  //   child: Text('LOGIN', style: TextStyle(fontSize: 18)),
-                  //   style: ElevatedButton.styleFrom(
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(30),
-                  //     ),
-                  //     primary: Colors.blue,
-                  //   ),
-                  // ),
                 ),
                 SizedBox(height: height * 0.02),
                 TextButton(
